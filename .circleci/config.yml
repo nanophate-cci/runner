@@ -1,0 +1,21 @@
+version: 2.1
+workflows:
+  testing:
+    jobs:
+      - runner-test
+jobs:
+  runner-test:
+    machine: true
+    resource_class: nanophate-cci/ec2-makoto-runner
+    steps:
+      - run: echo "Hi I'm on Runners!"
+      - run:
+          name: Create a File
+          command: |
+            echo "Hello, CircleCI!" > file.txt
+      - persist_to_workspace: # to make file available to subsequent jobs
+          root: . 
+          paths:
+            - file.txt
+      - store_artifacts: # to store the file as an artifact
+          path: file.txt
